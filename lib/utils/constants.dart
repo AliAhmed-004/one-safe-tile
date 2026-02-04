@@ -20,13 +20,13 @@ class GameConstants {
 
   // ============ SCROLL SETTINGS ============
   /// Initial scroll speed (pixels per second)
-  static const double initialScrollSpeed = 80.0;
+  static const double initialScrollSpeed = 30.0;
 
   /// Maximum scroll speed
-  static const double maxScrollSpeed = 250.0;
+  static const double maxScrollSpeed = 150.0;
 
   /// Speed increase per difficulty level
-  static const double speedIncrement = 8.0;
+  static const double speedIncrement = 5.0;
 
   /// Score threshold for speed increase
   static const int difficultyIncreaseInterval = 5;
