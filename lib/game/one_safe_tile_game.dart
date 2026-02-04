@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 
 import '../components/hud/joystick.dart';
 import '../components/hud/jump_button.dart';
+import '../components/hud/one_hand_controls.dart';
 import '../components/player.dart';
 import '../components/tile_row.dart';
 import '../utils/constants.dart';
+import '../utils/settings_manager.dart';
 
 /// Main game class for One Safe Tile.
 ///
@@ -40,11 +42,14 @@ class OneSafeTileGame extends FlameGame {
   /// List of active tile rows
   final List<TileRow> rows = [];
 
-  /// Joystick for horizontal movement
+  /// Joystick for horizontal movement (two-hand mode)
   GameJoystick? joystick;
 
-  /// Jump button
+  /// Jump button (two-hand mode)
   JumpButton? jumpButton;
+
+  /// One-hand controls (one-hand mode)
+  OneHandControls? oneHandControls;
 
   // ============ GAME CONFIG ============
   /// Distance between rows (vertical spacing)
@@ -160,11 +165,15 @@ class OneSafeTileGame extends FlameGame {
     player?.removeFromParent();
     player = null;
 
-    // Remove HUD components
+    // Remove HUD components (two-hand mode)
     joystick?.removeFromParent();
     joystick = null;
     jumpButton?.removeFromParent();
     jumpButton = null;
+
+    // Remove one-hand controls
+    oneHandControls?.removeFromParent();
+    oneHandControls = null;
   }
 
   /// Creates initial rows on the screen
@@ -217,8 +226,19 @@ class OneSafeTileGame extends FlameGame {
     add(player!);
   }
 
-  /// Creates the HUD (joystick and jump button)
+  /// Creates the controls based on current settings
   void _initializeHUD() {
+    final controlMode = SettingsManager.instance.getControlMode();
+
+    if (controlMode == ControlMode.oneHand) {
+      _initializeOneHandControls();
+    } else {
+      _initializeTwoHandControls();
+    }
+  }
+
+  /// Creates two-hand controls (joystick and jump button)
+  void _initializeTwoHandControls() {
     // Calculate controls Y position (center of controls area)
     final controlsAreaTop = size.y - GameConstants.controlsAreaHeight;
     final controlsCenterY =
@@ -249,6 +269,46 @@ class OneSafeTileGame extends FlameGame {
     // Add HUD components with high priority so they render on top
     add(joystick!);
     add(jumpButton!);
+
+    debugPrint('Two-hand controls initialized');
+  }
+
+  /// Creates one-hand controls (aim and release)
+  void _initializeOneHandControls() {
+    // One-hand controls cover the entire screen for aiming
+    // Using Angry Birds style "aim and release" mechanic
+    oneHandControls = OneHandControls(
+      position: Vector2(0, 0),
+      size: Vector2(size.x, size.y),
+      onAimRelease: _onAimRelease,
+    );
+
+    add(oneHandControls!);
+
+    // Add hint that fades out (positioned in controls area)
+    final hintY = size.y - GameConstants.controlsAreaHeight;
+    final hint = OneHandControlsHint(
+      position: Vector2(0, hintY),
+      size: Vector2(size.x, GameConstants.controlsAreaHeight),
+    );
+    add(hint);
+
+    debugPrint('One-hand controls initialized (aim & release)');
+  }
+
+  /// Called when aim is released in one-hand mode
+  void _onAimRelease(double horizontalVelocity) {
+    final currentPlayer = player;
+    if (currentPlayer == null ||
+        currentPlayer.isJumping ||
+        isGameOver ||
+        isPaused)
+      return;
+
+    // Set horizontal velocity and jump
+    currentPlayer.horizontalVelocity = horizontalVelocity;
+    currentPlayer.jump();
+    debugPrint('Aim release! Horizontal velocity: $horizontalVelocity');
   }
 
   /// Gets the current difficulty level (0.0 to 1.0)

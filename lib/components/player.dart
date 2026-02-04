@@ -119,6 +119,7 @@ class Player extends PositionComponent with HasGameRef<OneSafeTileGame> {
   void land(double platformY) {
     _isInAir = false;
     verticalVelocity = 0;
+    horizontalVelocity = 0; // Stop horizontal movement on landing
     // Position player on top of the platform
     position.y = platformY;
   }

@@ -63,6 +63,16 @@ class GameConstants {
 
   /// Margin from screen edges for controls
   static const double controlsMargin = 20.0;
+
+  // ============ AIM SETTINGS (One-Hand Mode) ============
+  /// Maximum aim drag distance in pixels (larger = need to drag further for full power)
+  static const double aimMaxDistance = 150.0;
+
+  /// Multiplier for horizontal velocity from aim (lower = less sensitive)
+  /// - 1.0 = subtle horizontal movement
+  /// - 1.5 = moderate (default)
+  /// - 2.0+ = more sensitive
+  static const double aimSensitivity = 1.5;
 }
 
 /// Game color palette

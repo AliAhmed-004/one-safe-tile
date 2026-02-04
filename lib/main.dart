@@ -9,7 +9,9 @@ import 'screens/game_hud.dart';
 import 'screens/game_over_overlay.dart';
 import 'screens/menu_screen.dart';
 import 'screens/pause_overlay.dart';
+import 'screens/settings_screen.dart';
 import 'utils/score_manager.dart';
+import 'utils/settings_manager.dart';
 
 void main() async {
   // Ensure Flutter bindings are initialized
@@ -27,8 +29,9 @@ void main() async {
     overlays: [],
   );
 
-  // Initialize score manager for high score persistence
+  // Initialize managers for persistence
   await ScoreManager.instance.initialize();
+  await SettingsManager.instance.initialize();
 
   runApp(const OneSafeTileApp());
 }
@@ -82,6 +85,20 @@ class _GameScreenState extends State<GameScreen> {
 
   void _showMenu() {
     game.showMenu();
+    // Rebuild to update control mode display
+    setState(() {});
+  }
+
+  void _showSettings() {
+    game.overlays.remove('menu');
+    game.overlays.add('settings');
+  }
+
+  void _hideSettings() {
+    game.overlays.remove('settings');
+    game.overlays.add('menu');
+    // Rebuild to update control mode display
+    setState(() {});
   }
 
   void _pauseGame() {
@@ -107,8 +124,14 @@ class _GameScreenState extends State<GameScreen> {
         initialActiveOverlays: const ['menu'],
         overlayBuilderMap: {
           // Main menu overlay
-          'menu': (context, OneSafeTileGame game) =>
-              MenuScreen(onPlayPressed: _startGame),
+          'menu': (context, OneSafeTileGame game) => MenuScreen(
+            onPlayPressed: _startGame,
+            onSettingsPressed: _showSettings,
+          ),
+
+          // Settings overlay
+          'settings': (context, OneSafeTileGame game) =>
+              SettingsScreen(onBackPressed: _hideSettings),
 
           // In-game HUD overlay (score + pause button at top)
           'hud': (context, OneSafeTileGame game) => Stack(
