@@ -135,8 +135,9 @@ class TileRow extends PositionComponent {
     for (int i = 0; i < GameConstants.tilesPerRow; i++) {
       final tileX = arenaLeft + GameConstants.tileSpacing + i * (tileWidth + GameConstants.tileSpacing);
       
+      // Use the new TileType system
       final tile = Tile(
-        isSafe: i == safeTileIndex,
+        tileType: i == safeTileIndex ? TileType.safe : TileType.dangerous,
         index: i,
         position: Vector2(tileX, 0),
         size: Vector2(tileWidth, tileHeight),

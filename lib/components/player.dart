@@ -5,7 +5,7 @@ import '../game/one_safe_tile_game.dart';
 import '../utils/constants.dart';
 
 /// The player character that jumps between tile rows.
-/// 
+///
 /// The player can move horizontally using the joystick and jump
 /// using the jump button. Physics-based movement with gravity.
 class Player extends PositionComponent with HasGameRef<OneSafeTileGame> {
@@ -28,11 +28,11 @@ class Player extends PositionComponent with HasGameRef<OneSafeTileGame> {
   late RectangleComponent _body;
 
   Player({required Vector2 position})
-      : super(
-          position: position,
-          size: Vector2.all(GameConstants.playerSize),
-          anchor: Anchor.center,
-        );
+    : super(
+        position: position,
+        size: Vector2.all(GameConstants.playerSize),
+        anchor: Anchor.center,
+      );
 
   @override
   Future<void> onLoad() async {
@@ -90,14 +90,25 @@ class Player extends PositionComponent with HasGameRef<OneSafeTileGame> {
   void _updatePhysics(double dt) {
     // Get current gravity and apply to vertical velocity
     // Gravity scales up slightly with game speed for snappier feel
-    final speedMultiplier = 1.0 + (gameRef.scrollSpeed / GameConstants.maxScrollSpeed) * 0.3;
+    final speedMultiplier =
+        1.0 + (gameRef.scrollSpeed / GameConstants.maxScrollSpeed) * 0.3;
     final gravity = _baseGravity * speedMultiplier;
-    
+
     verticalVelocity += gravity * dt;
 
     // Update position
     final previousY = position.y;
     position.y += verticalVelocity * dt;
+
+    // Emit jump trail particles occasionally
+    if (gameRef.particleEmitter != null) {
+      // Emit trail particles at ~20fps
+      _trailTimer += dt;
+      if (_trailTimer >= 0.05) {
+        _trailTimer = 0;
+        gameRef.particleEmitter!.emitJumpTrail(position);
+      }
+    }
 
     // Check for landing on a platform (only when falling down)
     if (verticalVelocity > 0) {
@@ -105,13 +116,17 @@ class Player extends PositionComponent with HasGameRef<OneSafeTileGame> {
     }
   }
 
+  /// Timer for jump trail particle emission
+  double _trailTimer = 0;
+
   /// Initiates a jump
   void jump() {
     if (_isInAir) return;
 
     _isInAir = true;
     // Jump velocity scales up slightly with game speed
-    final speedMultiplier = 1.0 + (gameRef.scrollSpeed / GameConstants.maxScrollSpeed) * 0.3;
+    final speedMultiplier =
+        1.0 + (gameRef.scrollSpeed / GameConstants.maxScrollSpeed) * 0.3;
     verticalVelocity = _baseJumpVelocity * speedMultiplier;
   }
 

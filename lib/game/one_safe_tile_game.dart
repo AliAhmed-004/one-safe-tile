@@ -4,6 +4,8 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+import '../components/effects/particle_system.dart';
+import '../components/effects/screen_shake.dart';
 import '../components/hud/joystick.dart';
 import '../components/hud/jump_button.dart';
 import '../components/hud/one_hand_controls.dart';
@@ -50,6 +52,12 @@ class OneSafeTileGame extends FlameGame {
 
   /// One-hand controls (one-hand mode)
   OneHandControls? oneHandControls;
+
+  /// Particle emitter for visual effects
+  ParticleEmitter? particleEmitter;
+
+  /// Screen shake controller
+  ScreenShaker? screenShaker;
 
   // ============ GAME CONFIG ============
   /// Distance between rows (vertical spacing)
@@ -128,6 +136,7 @@ class OneSafeTileGame extends FlameGame {
     _initializeRows();
     _initializePlayer();
     _initializeHUD();
+    _initializeEffects();
 
     // Switch overlays: hide menu, show HUD
     overlays.remove('menu');
@@ -174,6 +183,12 @@ class OneSafeTileGame extends FlameGame {
     // Remove one-hand controls
     oneHandControls?.removeFromParent();
     oneHandControls = null;
+
+    // Remove effects
+    particleEmitter?.removeFromParent();
+    particleEmitter = null;
+    screenShaker?.removeFromParent();
+    screenShaker = null;
   }
 
   /// Creates initial rows on the screen
@@ -294,6 +309,19 @@ class OneSafeTileGame extends FlameGame {
     add(hint);
 
     debugPrint('One-hand controls initialized (aim & release)');
+  }
+
+  /// Creates effect components (particles, screen shake)
+  void _initializeEffects() {
+    // Particle emitter for visual effects (render above everything)
+    particleEmitter = ParticleEmitter()..priority = 100;
+    add(particleEmitter!);
+
+    // Screen shaker for impact feedback
+    screenShaker = ScreenShaker()..camera = camera;
+    add(screenShaker!);
+
+    debugPrint('Effects initialized');
   }
 
   /// Called when aim is released in one-hand mode
@@ -470,9 +498,19 @@ class OneSafeTileGame extends FlameGame {
     if (landedTile.isSafe) {
       // Success! Score a point
       onSuccessfulJump();
+
+      // Emit safe landing particles
+      particleEmitter?.emitSafeLanding(currentPlayer.position);
+
       debugPrint('Landed on safe tile! Row: ${row.rowIndex}');
     } else {
       // Landed on dangerous tile - game over
+      // Emit danger explosion particles
+      particleEmitter?.emitDangerLanding(currentPlayer.position);
+
+      // Heavy screen shake for death impact
+      screenShaker?.shakeHeavy();
+
       onPlayerDeath(reason: 'Wrong tile!');
     }
   }
@@ -488,6 +526,17 @@ class OneSafeTileGame extends FlameGame {
   /// Called when player dies
   void onPlayerDeath({String reason = 'Game Over'}) {
     isGameOver = true;
+
+    // Add death effects if player exists (for falling death)
+    final currentPlayer = player;
+    if (currentPlayer != null) {
+      // Only emit particles if not already emitted (e.g., tile death)
+      if (reason == 'Fell behind!' || reason == 'Fell between tiles!') {
+        particleEmitter?.emitDangerLanding(currentPlayer.position);
+        screenShaker?.shakeMedium();
+      }
+    }
+
     debugPrint('Game Over! Reason: $reason, Final score: $score');
 
     // Switch overlays: hide HUD, show game over
