@@ -27,9 +27,9 @@ A minimalist, mobile-first reflex game where every row has exactly one safe tile
 ## Implementation Phases
 
 ### Phase 1: Project Setup
-- [ ] Add Flame dependency to `pubspec.yaml`
-- [ ] Set up project folder structure (`game/`, `components/`, `screens/`, `utils/`)
-- [ ] Create the main `FlameGame` class
+- [x] Add Flame dependency to `pubspec.yaml`
+- [x] Set up project folder structure (`game/`, `components/`, `screens/`, `utils/`)
+- [x] Create the main `FlameGame` class
 
 ### Phase 2: Core Game Mechanics
 - [ ] Create the `Tile` component (single tile with safe/dangerous state)
