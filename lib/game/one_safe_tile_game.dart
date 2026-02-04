@@ -153,12 +153,34 @@ class OneSafeTileGame extends FlameGame {
     await add(jumpButton);
   }
 
+  /// Gets the current difficulty level (0.0 to 1.0)
+  /// Starts at 0 and gradually increases based on score
+  double get _currentDifficulty {
+    // Difficulty increases from 0 to 1 over the first 50 points
+    // After 50 points, it stays at max difficulty (1.0)
+    const maxScoreForFullDifficulty = 50;
+    return (score / maxScoreForFullDifficulty).clamp(0.0, 1.0);
+  }
+
+  /// Gets the safe tile index of the most recently spawned row
+  int get _lastSafeTileIndex {
+    if (rows.isEmpty) {
+      // Start in the middle if no rows exist
+      return GameConstants.tilesPerRow ~/ 2;
+    }
+    // Get the row with the lowest Y (highest on screen = most recent spawn)
+    final newestRow = rows.reduce((a, b) => a.position.y < b.position.y ? a : b);
+    return newestRow.safeTileIndex;
+  }
+
   /// Spawns a new row at the specified Y position
   void _spawnRow({required double atY}) {
-    final row = TileRow.random(
+    final row = TileRow.algorithmic(
       rowIndex: _nextRowIndex++,
       position: Vector2(0, atY),
       screenWidth: size.x,
+      previousSafeTileIndex: _lastSafeTileIndex,
+      difficulty: _currentDifficulty,
       random: _random,
     );
 

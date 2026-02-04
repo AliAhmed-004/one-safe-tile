@@ -18,11 +18,11 @@ class Player extends PositionComponent with HasGameRef<OneSafeTileGame> {
   /// Whether the player is currently in the air (jumping or falling)
   bool _isInAir = false;
 
-  /// Gravity acceleration (pixels per second squared)
-  static const double _gravity = 800.0;
+  /// Base gravity acceleration (pixels per second squared)
+  static const double _baseGravity = 1200.0;
 
-  /// Initial jump velocity (negative = upward)
-  static const double _jumpVelocity = -400.0;
+  /// Base jump velocity (negative = upward)
+  static const double _baseJumpVelocity = -500.0;
 
   /// Visual representation of the player
   late RectangleComponent _body;
@@ -88,8 +88,12 @@ class Player extends PositionComponent with HasGameRef<OneSafeTileGame> {
 
   /// Updates physics (gravity and vertical movement)
   void _updatePhysics(double dt) {
-    // Apply gravity to vertical velocity
-    verticalVelocity += _gravity * dt;
+    // Get current gravity and apply to vertical velocity
+    // Gravity scales up slightly with game speed for snappier feel
+    final speedMultiplier = 1.0 + (gameRef.scrollSpeed / GameConstants.maxScrollSpeed) * 0.3;
+    final gravity = _baseGravity * speedMultiplier;
+    
+    verticalVelocity += gravity * dt;
 
     // Update position
     final previousY = position.y;
@@ -106,7 +110,9 @@ class Player extends PositionComponent with HasGameRef<OneSafeTileGame> {
     if (_isInAir) return;
 
     _isInAir = true;
-    verticalVelocity = _jumpVelocity;
+    // Jump velocity scales up slightly with game speed
+    final speedMultiplier = 1.0 + (gameRef.scrollSpeed / GameConstants.maxScrollSpeed) * 0.3;
+    verticalVelocity = _baseJumpVelocity * speedMultiplier;
   }
 
   /// Called when player lands on a platform

@@ -35,11 +35,11 @@ class GameConstants {
   /// Player size (width and height)
   static const double playerSize = 30.0;
 
-  /// Jump duration in seconds
+  /// Jump duration in seconds (legacy - not used with physics)
   static const double jumpDuration = 0.35;
 
   /// Horizontal movement speed (pixels per second)
-  static const double playerMoveSpeed = 300.0;
+  static const double playerMoveSpeed = 400.0;
 
   // ============ CONTROLS SETTINGS ============
   /// Joystick size
