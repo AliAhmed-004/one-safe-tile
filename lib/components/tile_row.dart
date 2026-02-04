@@ -19,19 +19,23 @@ class TileRow extends PositionComponent {
   /// List of tile components in this row
   final List<Tile> tiles = [];
 
-  /// Width of each tile (calculated based on screen width)
+  /// Width of each tile (calculated based on arena width)
   late double tileWidth;
 
   /// Height of each tile (platform height)
   final double tileHeight = GameConstants.platformHeight;
 
+  /// Left offset for the arena
+  final double arenaLeft;
+
   TileRow({
     required this.safeTileIndex,
     required this.rowIndex,
     required Vector2 position,
-    required double screenWidth,
+    required double arenaWidth,
+    this.arenaLeft = 0,
   }) : super(position: position) {
-    _createTiles(screenWidth);
+    _createTiles(arenaWidth);
   }
 
   /// Factory constructor that uses algorithmic safe tile placement
@@ -43,9 +47,10 @@ class TileRow extends PositionComponent {
   factory TileRow.algorithmic({
     required int rowIndex,
     required Vector2 position,
-    required double screenWidth,
+    required double arenaWidth,
     required int previousSafeTileIndex,
     required double difficulty,
+    double arenaLeft = 0,
     Random? random,
   }) {
     final rng = random ?? Random();
@@ -59,7 +64,8 @@ class TileRow extends PositionComponent {
       safeTileIndex: safeTileIndex,
       rowIndex: rowIndex,
       position: position,
-      screenWidth: screenWidth,
+      arenaWidth: arenaWidth,
+      arenaLeft: arenaLeft,
     );
   }
 
@@ -105,7 +111,8 @@ class TileRow extends PositionComponent {
   factory TileRow.random({
     required int rowIndex,
     required Vector2 position,
-    required double screenWidth,
+    required double arenaWidth,
+    double arenaLeft = 0,
     Random? random,
   }) {
     final rng = random ?? Random();
@@ -115,17 +122,18 @@ class TileRow extends PositionComponent {
       safeTileIndex: safeTileIndex,
       rowIndex: rowIndex,
       position: position,
-      screenWidth: screenWidth,
+      arenaWidth: arenaWidth,
+      arenaLeft: arenaLeft,
     );
   }
 
   /// Creates all tiles for this row
-  void _createTiles(double screenWidth) {
+  void _createTiles(double arenaWidth) {
     final totalSpacing = GameConstants.tileSpacing * (GameConstants.tilesPerRow + 1);
-    tileWidth = (screenWidth - totalSpacing) / GameConstants.tilesPerRow;
+    tileWidth = (arenaWidth - totalSpacing) / GameConstants.tilesPerRow;
 
     for (int i = 0; i < GameConstants.tilesPerRow; i++) {
-      final tileX = GameConstants.tileSpacing + i * (tileWidth + GameConstants.tileSpacing);
+      final tileX = arenaLeft + GameConstants.tileSpacing + i * (tileWidth + GameConstants.tileSpacing);
       
       final tile = Tile(
         isSafe: i == safeTileIndex,

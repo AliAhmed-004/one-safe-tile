@@ -55,12 +55,12 @@ A minimalist, mobile-first reflex game where every row has exactly one safe tile
 ### Phase 5: Scoring & Difficulty
 - [x] Implement score tracking (+1 per successful jump)
 - [x] Implement difficulty scaling (scroll speed increases with score)
-- [ ] Add local high score persistence (`shared_preferences`)
+- [x] Add local high score persistence (`shared_preferences`)
 
 ### Phase 6: UI & Screens
-- [ ] Create Start/Menu screen (title, play button, high score)
-- [ ] Create Game Over overlay (final score, high score, restart)
-- [ ] Create in-game HUD (current score display)
+- [x] Create Start/Menu screen (title, play button, high score)
+- [x] Create Game Over overlay (final score, high score, restart)
+- [x] Create in-game HUD (current score display)
 
 ### Phase 7: Polish & Feedback
 - [ ] Add visual feedback for safe landing (e.g., color flash, particles)

@@ -5,6 +5,19 @@ class GameConstants {
   // Prevent instantiation
   GameConstants._();
 
+  // ============ LAYOUT SETTINGS ============
+  /// Height of the top HUD area (score, pause button)
+  static const double hudAreaHeight = 60.0;
+
+  /// Height of the bottom controls area (joystick, jump button)
+  static const double controlsAreaHeight = 160.0;
+
+  /// Padding inside the arena from its border
+  static const double arenaPadding = 8.0;
+
+  /// Border width for arena
+  static const double arenaBorderWidth = 2.0;
+
   // ============ GRID SETTINGS ============
   /// Number of tiles per row
   static const int tilesPerRow = 5;
@@ -87,4 +100,10 @@ class GameColors {
   static const Color joystickBackground = Color(0x44FFFFFF);
   static const Color joystickKnob = Color(0xAAFFFFFF);
   static const Color jumpButton = Color(0xFFE94560);
+
+  // ============ ARENA COLORS ============
+  static const Color arenaBorder = Color(0xFF3D5A80);
+  static const Color arenaBackground = Color(0xFF0D1321);
+  static const Color hudBackground = Color(0xFF1A1A2E);
+  static const Color controlsBackground = Color(0xFF1A1A2E);
 }

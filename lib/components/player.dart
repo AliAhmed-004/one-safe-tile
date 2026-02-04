@@ -78,10 +78,10 @@ class Player extends PositionComponent with HasGameRef<OneSafeTileGame> {
 
     final newX = position.x + horizontalVelocity * dt;
 
-    // Clamp to screen bounds (with some padding)
+    // Clamp to arena bounds (with some padding)
     final halfWidth = size.x / 2;
-    final minX = halfWidth + GameConstants.tileSpacing;
-    final maxX = gameRef.size.x - halfWidth - GameConstants.tileSpacing;
+    final minX = gameRef.arenaLeft + halfWidth + GameConstants.tileSpacing;
+    final maxX = gameRef.arenaRight - halfWidth - GameConstants.tileSpacing;
 
     position.x = newX.clamp(minX, maxX);
   }
