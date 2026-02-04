@@ -9,28 +9,34 @@ class GameConstants {
   /// Number of tiles per row
   static const int tilesPerRow = 5;
 
-  /// Tile dimensions (calculated dynamically based on screen width)
-  static const double tileSpacing = 2.0;
+  /// Horizontal spacing between tiles
+  static const double tileSpacing = 4.0;
+
+  /// Platform/tile height (thin like Icy Tower platforms)
+  static const double platformHeight = 20.0;
+
+  /// Vertical spacing between rows (gap between platforms)
+  static const double rowSpacing = 60.0;
 
   // ============ SCROLL SETTINGS ============
   /// Initial scroll speed (pixels per second)
-  static const double initialScrollSpeed = 100.0;
+  static const double initialScrollSpeed = 80.0;
 
   /// Maximum scroll speed
-  static const double maxScrollSpeed = 300.0;
+  static const double maxScrollSpeed = 250.0;
 
   /// Speed increase per difficulty level
-  static const double speedIncrement = 10.0;
+  static const double speedIncrement = 8.0;
 
   /// Score threshold for speed increase
   static const int difficultyIncreaseInterval = 5;
 
   // ============ PLAYER SETTINGS ============
   /// Player size (width and height)
-  static const double playerSize = 40.0;
+  static const double playerSize = 30.0;
 
   /// Jump duration in seconds
-  static const double jumpDuration = 0.3;
+  static const double jumpDuration = 0.35;
 
   /// Horizontal movement speed (pixels per second)
   static const double playerMoveSpeed = 300.0;

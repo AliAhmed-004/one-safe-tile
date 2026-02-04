@@ -32,29 +32,29 @@ A minimalist, mobile-first reflex game where every row has exactly one safe tile
 - [x] Create the main `FlameGame` class
 
 ### Phase 2: Core Game Mechanics
-- [ ] Create the `Tile` component (single tile with safe/dangerous state)
-- [ ] Create the `TileRow` component (row of N tiles, one marked safe)
-- [ ] Implement row spawning logic (spawn new rows at bottom)
-- [ ] Implement upward scrolling (configurable speed)
-- [ ] Implement row cleanup (remove rows that scroll off-screen)
+- [x] Create the `Tile` component (single tile with safe/dangerous state)
+- [x] Create the `TileRow` component (row of N tiles, one marked safe)
+- [x] Implement row spawning logic (spawn new rows at bottom)
+- [x] Implement upward scrolling (configurable speed)
+- [x] Implement row cleanup (remove rows that scroll off-screen)
 
 ### Phase 3: Player & Controls
-- [ ] Create `Player` component with basic rendering
-- [ ] Implement fixed joystick for left/right movement
-- [ ] Implement jump button for forward jumps
-- [ ] Add jump physics (arc movement to next row)
-- [ ] Implement collision detection (player landing on tiles)
+- [x] Create `Player` component with basic rendering
+- [x] Implement fixed joystick for left/right movement
+- [x] Implement jump button for forward jumps
+- [x] Add jump physics (arc movement to next row)
+- [x] Implement collision detection (player landing on tiles)
 
 ### Phase 4: Game State & Death Conditions
-- [ ] Track which row the player is currently on
-- [ ] Validate landing — safe tile vs dangerous tile
-- [ ] Handle death: landing on dangerous tile
-- [ ] Handle death: scroll catches up to player (fell behind)
-- [ ] Implement game over state
+- [x] Track which row the player is currently on
+- [x] Validate landing — safe tile vs dangerous tile
+- [x] Handle death: landing on dangerous tile
+- [x] Handle death: scroll catches up to player (fell behind)
+- [x] Implement game over state
 
 ### Phase 5: Scoring & Difficulty
-- [ ] Implement score tracking (+1 per successful jump)
-- [ ] Implement difficulty scaling (scroll speed increases with score)
+- [x] Implement score tracking (+1 per successful jump)
+- [x] Implement difficulty scaling (scroll speed increases with score)
 - [ ] Add local high score persistence (`shared_preferences`)
 
 ### Phase 6: UI & Screens
